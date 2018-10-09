@@ -3,7 +3,12 @@ package com.zing.security.core.validate.code;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * 验证码信息封装类
+ */
 public class ValidateCode implements Serializable {
+
+    private static final long serialVersionUID = -8012115430443483403L;
 
     private String code;
 

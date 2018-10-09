@@ -1,6 +1,7 @@
 package com.zing.security.server;
 
 import com.zing.security.app.authentication.openid.OpenIdAuthenticationSecurityConfig;
+import com.zing.security.core.authentication.FormAuthenticationConfig;
 import com.zing.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.zing.security.core.authorize.AuthorizeConfigManager;
 import com.zing.security.core.properties.SecurityConstants;
@@ -15,18 +16,12 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.social.security.SpringSocialConfigurer;
 
+/**
+ * 资源服务器配置
+ */
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-
-    @Autowired
-    private SecurityProperties securityProperties;
-
-    @Autowired
-    private AuthenticationSuccessHandler simpleAuthenticationSuccessHandler;
-
-    @Autowired
-    private AuthenticationFailureHandler simpleAuthenticationFailureHandler;
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
@@ -43,18 +38,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private AuthorizeConfigManager authorizeConfigManager;
 
-    protected void applyPasswordAuthenticationConfig(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
-                .loginProcessingUrl(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)
-                .successHandler(simpleAuthenticationSuccessHandler)
-                .failureHandler(simpleAuthenticationFailureHandler);
-    }
+    @Autowired
+    private FormAuthenticationConfig formAuthenticationConfig;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        applyPasswordAuthenticationConfig(http);
+        formAuthenticationConfig.configure(http);
 
         http.apply(validateCodeSecurityConfig)
                 .and()
@@ -64,21 +54,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
             .apply(openIdAuthenticationSecurityConfig)
                 .and()
-//            .authorizeRequests()
-//                .antMatchers(
-//                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-//                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-//                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_OPENID,
-//                        securityProperties.getBrowser().getLoginPage(),
-//                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-//                        securityProperties.getBrowser().getSignUpUrl(),
-//                        securityProperties.getBrowser().getSession().getSessionInvalidUrl() + ".html",
-//                        securityProperties.getBrowser().getSignOutUrl(),
-//                        "/user/register", "/social/signUp")
-//                    .permitAll()
-//                .anyRequest()
-//                    .authenticated()
-//                .and()
             .csrf().disable();
 
         authorizeConfigManager.config(http.authorizeRequests());

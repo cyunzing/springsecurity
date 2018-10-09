@@ -15,18 +15,20 @@ public class TimeAspect {
     public Object handleControllerMethod(ProceedingJoinPoint pjp) throws Throwable {
 
         System.out.println("time aspect start");
-        long start = new Date().getTime();
 
         Object[] args = pjp.getArgs();
         for (Object arg : args) {
             System.out.println("arg: " + arg);
         }
 
-        Object o = pjp.proceed();
+        long start = new Date().getTime();
+
+        Object object = pjp.proceed();
 
         System.out.println("time aspect 耗时: " + (new Date().getTime() - start) + "ms");
+
         System.out.println("time aspect finish");
 
-        return o;
+        return object;
     }
 }

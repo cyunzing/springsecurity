@@ -13,8 +13,10 @@ import org.springframework.social.security.SocialUser;
 import org.springframework.social.security.SocialUserDetails;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 public class DemoUserDetailService implements UserDetailsService, SocialUserDetailsService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -39,6 +41,7 @@ public class DemoUserDetailService implements UserDetailsService, SocialUserDeta
         //根据查找到的用户信息判断用户是否被冻结
         String password = passwordEncoder.encode("123456");
         logger.info("数据库密码是:" + password);
+
         return new SocialUser(userId, password,
                 true, true, true, true,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN"));

@@ -15,6 +15,7 @@ import java.util.List;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+    @SuppressWarnings("unused")
     @Autowired
     private TimeInterceptor timeInterceptor;
 

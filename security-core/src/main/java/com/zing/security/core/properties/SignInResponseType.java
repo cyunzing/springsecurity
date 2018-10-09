@@ -1,6 +1,9 @@
 package com.zing.security.core.properties;
 
-public enum LoginResponseType {
+/**
+ * 认证成功后的响应方式
+ */
+public enum SignInResponseType {
 
     /**
      * 跳转

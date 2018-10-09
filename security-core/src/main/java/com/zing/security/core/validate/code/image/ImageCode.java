@@ -5,6 +5,9 @@ import com.zing.security.core.validate.code.ValidateCode;
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
+/**
+ * 图片验证码
+ */
 public class ImageCode extends ValidateCode {
 
     private BufferedImage image;

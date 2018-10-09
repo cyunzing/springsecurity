@@ -2,6 +2,9 @@ package com.zing.security.core.validate.code;
 
 import org.springframework.web.context.request.ServletWebRequest;
 
+/**
+ * 校验码存取器
+ */
 public interface ValidateCodeRepository {
 
     /**

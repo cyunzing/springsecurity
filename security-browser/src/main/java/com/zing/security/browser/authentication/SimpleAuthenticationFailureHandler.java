@@ -2,7 +2,7 @@ package com.zing.security.browser.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zing.security.core.support.SimpleResponse;
-import com.zing.security.core.properties.LoginResponseType;
+import com.zing.security.core.properties.SignInResponseType;
 import com.zing.security.core.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 浏览器环境下登录失败的处理器
+ */
 @Component("simpleAuthenticationFailureHandler")
 public class SimpleAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
@@ -33,7 +36,7 @@ public class SimpleAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         logger.info("登录失败");
 
-        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
+        if (SignInResponseType.JSON.equals(securityProperties.getBrowser().getSignInResponseType())) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));

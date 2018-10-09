@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -20,6 +21,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 认证服务器配置
+ */
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -42,6 +46,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired(required = false)
     private TokenEnhancer jwtTokenEnhancer;
 
+    /**
+     * 认证及token配置
+     *
+     * @param endpoints
+     * @throws Exception
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore)
@@ -60,6 +70,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         }
     }
 
+    /**
+     * tokenKey的访问权限表达式配置
+     *
+     * @param security
+     * @throws Exception
+     */
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.tokenKeyAccess("permitAll()");
+    }
+
+    /**
+     * 客户端配置
+     *
+     * @param clients
+     * @throws Exception
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         InMemoryClientDetailsServiceBuilder builder = clients.inMemory();
@@ -73,7 +100,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                         .scopes("all");
             }
         }
-
 
     }
 }

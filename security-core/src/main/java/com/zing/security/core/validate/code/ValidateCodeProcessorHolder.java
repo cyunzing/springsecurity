@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * 校验码处理器管理器
+ */
 @Component
 public class ValidateCodeProcessorHolder {
 

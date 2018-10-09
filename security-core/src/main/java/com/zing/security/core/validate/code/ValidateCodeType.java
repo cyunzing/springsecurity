@@ -2,6 +2,9 @@ package com.zing.security.core.validate.code;
 
 import com.zing.security.core.properties.SecurityConstants;
 
+/**
+ * 校验码类型
+ */
 public enum ValidateCodeType {
 
     /**

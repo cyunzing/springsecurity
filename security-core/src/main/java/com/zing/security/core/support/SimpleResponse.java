@@ -1,5 +1,8 @@
 package com.zing.security.core.support;
 
+/**
+ * 简单响应的封装类
+ */
 public class SimpleResponse {
 
     public SimpleResponse(Object content) {

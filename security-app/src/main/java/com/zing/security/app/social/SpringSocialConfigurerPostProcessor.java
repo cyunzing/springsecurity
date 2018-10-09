@@ -1,7 +1,7 @@
 package com.zing.security.app.social;
 
 import com.zing.security.core.properties.SecurityConstants;
-import com.zing.security.core.social.SimpleSpringSocialConfigurer;
+import com.zing.security.core.social.support.SimpleSpringSocialConfigurer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;

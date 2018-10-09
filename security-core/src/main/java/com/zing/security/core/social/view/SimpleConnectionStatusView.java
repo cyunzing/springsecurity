@@ -1,4 +1,4 @@
-package com.zing.security.core.social;
+package com.zing.security.core.social.view;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.CollectionUtils;
@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 社交账号绑定状态视图
+ */
 @Component("connect/status")
 public class SimpleConnectionStatusView extends AbstractView {
 

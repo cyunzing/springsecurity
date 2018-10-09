@@ -1,4 +1,4 @@
-package com.zing.security.core.support;
+package com.zing.security.core.social.support;
 
 public class SocialUserInfo {
     private String providerId;

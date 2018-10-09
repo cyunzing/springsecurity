@@ -3,7 +3,7 @@ package com.zing.security.server;
 import com.zing.security.server.JwtTokenEnhancer;
 import com.zing.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,17 +17,26 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @Configuration
 public class TokenStoreConfig {
 
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
+    /**
+     * 使用redis存储token的配置，只有在zing.security.oauth2.tokenStore配置为redis时生效
+     */
+    @Configuration
+    @ConditionalOnProperty(prefix = "zing.security.oauth2", name = "tokenStore", havingValue = "redis")
+    public static class RedisConfig {
+        @Autowired
+        private RedisConnectionFactory redisConnectionFactory;
 
-    @Bean
-    @ConditionalOnProperty(prefix = "zing.security.oauth2", name = "storeType", havingValue = "redis")
-    public TokenStore redisTokenStore() {
-        return new RedisTokenStore(redisConnectionFactory);
+        @Bean
+        public TokenStore redisTokenStore() {
+            return new RedisTokenStore(redisConnectionFactory);
+        }
     }
 
+    /**
+     * 使用jwt时的配置，默认生效
+     */
     @Configuration
-    @ConditionalOnProperty(prefix = "zing.security.oauth2", name = "storeType", havingValue = "jwt", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "zing.security.oauth2", name = "tokenStore", havingValue = "jwt", matchIfMissing = true)
     public static class JwtTokenConfig {
 
         @Autowired
@@ -40,13 +49,13 @@ public class TokenStoreConfig {
 
         @Bean
         public JwtAccessTokenConverter jwtAccessTokenConverter() {
-            JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-            accessTokenConverter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
-            return accessTokenConverter;
+            JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+            converter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
+            return converter;
         }
 
         @Bean
-        @ConditionalOnMissingBean(name = "jwtTokenEnhancer")
+        @ConditionalOnBean(TokenEnhancer.class)
         public TokenEnhancer jwtTokenEnhancer() {
             return new JwtTokenEnhancer();
         }

@@ -2,7 +2,8 @@ package com.zing.security.app;
 
 import com.zing.security.app.social.AppSignUpUtils;
 import com.zing.security.core.properties.SecurityConstants;
-import com.zing.security.core.support.SocialUserInfo;
+import com.zing.security.core.social.SocialController;
+import com.zing.security.core.social.support.SocialUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.social.connect.Connection;
@@ -15,7 +16,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-public class AppSecurityController {
+public class AppSecurityController extends SocialController {
 
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
@@ -32,16 +33,11 @@ public class AppSecurityController {
     @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
-        SocialUserInfo userInfo = new SocialUserInfo();
-        Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
-        userInfo.setProviderId(connection.getKey().getProviderId());
-        userInfo.setProviderUserId(connection.getKey().getProviderUserId());
-        userInfo.setNickname(connection.getDisplayName());
-        userInfo.setHeadimg(connection.getImageUrl());
 
+        Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
         appSignUpUtils.saveConnectionData(new ServletWebRequest(request), connection.createData());
 
-        return userInfo;
+        return buildSocialUserInfo(connection);
     }
 
 }

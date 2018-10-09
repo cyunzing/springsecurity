@@ -1,7 +1,8 @@
 package com.zing.security.browser;
 
+import com.zing.security.core.social.SocialController;
 import com.zing.security.core.support.SimpleResponse;
-import com.zing.security.core.support.SocialUserInfo;
+import com.zing.security.core.social.support.SocialUserInfo;
 import com.zing.security.core.properties.SecurityConstants;
 import com.zing.security.core.properties.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
@@ -26,8 +27,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 浏览器环境下与安全相关的服务
+ */
 @RestController
-public class BrowserSecurityController {
+public class BrowserSecurityController extends SocialController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -61,29 +65,23 @@ public class BrowserSecurityController {
             logger.info("引发跳转的请求是:" + targetUrl);
 
             if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
-                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
+                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getSignInUrl());
             }
         }
 
         return new SimpleResponse("访问的服务需要身份认证，请引导用户到登录页");
     }
 
-    @GetMapping("/social/user")
+    /**
+     * 用户第一次社交登录时，会引导用户进行用户注册或绑定，此服务用于在注册或绑定页面获取社交网站用户信息
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
     public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
-        SocialUserInfo userInfo = new SocialUserInfo();
         Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
-        userInfo.setProviderId(connection.getKey().getProviderId());
-        userInfo.setProviderUserId(connection.getKey().getProviderUserId());
-        userInfo.setNickname(connection.getDisplayName());
-        userInfo.setHeadimg(connection.getImageUrl());
-        return userInfo;
-    }
-
-    @GetMapping("/session/invalid")
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-    public SimpleResponse sessionInvalid() {
-        String message = "session失效";
-        return new SimpleResponse(message);
+        return buildSocialUserInfo(connection);
     }
 
 }

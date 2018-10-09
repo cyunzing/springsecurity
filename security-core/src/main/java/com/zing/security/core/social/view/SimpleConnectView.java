@@ -1,4 +1,4 @@
-package com.zing.security.core.social;
+package com.zing.security.core.social.view;
 
 import org.springframework.web.servlet.view.AbstractView;
 
@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+/**
+ * 绑定结果视图
+ */
 public class SimpleConnectView extends AbstractView {
 
     @Override

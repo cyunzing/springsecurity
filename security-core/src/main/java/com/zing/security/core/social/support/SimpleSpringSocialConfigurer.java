@@ -1,8 +1,11 @@
-package com.zing.security.core.social;
+package com.zing.security.core.social.support;
 
 import org.springframework.social.security.SocialAuthenticationFilter;
 import org.springframework.social.security.SpringSocialConfigurer;
 
+/**
+ * 继承默认的社交登录配置，加入自定义的后处理逻辑
+ */
 public class SimpleSpringSocialConfigurer extends SpringSocialConfigurer {
 
     private String filterProcessesUrl;
@@ -13,6 +16,7 @@ public class SimpleSpringSocialConfigurer extends SpringSocialConfigurer {
         this.filterProcessesUrl = filterProcessesUrl;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected <T> T postProcess(T object) {
         SocialAuthenticationFilter filter = (SocialAuthenticationFilter) super.postProcess(object);

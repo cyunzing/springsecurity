@@ -1,6 +1,7 @@
 package com.zing.security.browser;
 
 import com.zing.security.core.authentication.AbstractChannelSecurityConfig;
+import com.zing.security.core.authentication.FormAuthenticationConfig;
 import com.zing.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.zing.security.core.authorize.AuthorizeConfigManager;
 import com.zing.security.core.properties.SecurityConstants;
@@ -21,6 +22,9 @@ import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
+/**
+ * 浏览器环境下安全配置主类
+ */
 @Configuration
 public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
@@ -54,6 +58,14 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private AuthorizeConfigManager authorizeConfigManager;
 
+    @Autowired
+    private FormAuthenticationConfig formAuthenticationConfig;
+
+    /**
+     * 记住我功能的token存取器配置
+     *
+     * @return
+     */
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -65,7 +77,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        applyPasswordAuthenticationConfig(http);
+        formAuthenticationConfig.configure(http);
 
         http.apply(validateCodeSecurityConfig)
                 .and()
@@ -73,6 +85,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .and()
             .apply(simpleSpringSocialConfigurer)
                 .and()
+            //记住我配置，如果想在'记住我'登录时记录日志，可以注册一个InteractiveAuthenticationSuccessEvent事件的监听器
             .rememberMe()
                 .tokenRepository(persistentTokenRepository())
                 .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
@@ -91,22 +104,6 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .and()
-//            .authorizeRequests()
-//                .antMatchers(
-//                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-//                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-//                        securityProperties.getBrowser().getLoginPage(),
-//                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-//                        securityProperties.getBrowser().getSignUpUrl(),
-//                        securityProperties.getBrowser().getSession().getSessionInvalidUrl() + ".html",
-//                        securityProperties.getBrowser().getSignOutUrl(),
-//                        "/user/register")
-//                    .permitAll()
-//                .antMatchers(HttpMethod.GET,"/user/*")
-//                    .hasRole("ADMIN")
-//                .anyRequest()
-//                    .authenticated()
-//                .and()
             .csrf().disable();
 
         authorizeConfigManager.config(http.authorizeRequests());

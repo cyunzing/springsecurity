@@ -11,9 +11,4 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityCoreConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

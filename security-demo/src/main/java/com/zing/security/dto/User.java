@@ -2,6 +2,7 @@ package com.zing.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.zing.security.validator.MyConstraint;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Past;
@@ -15,6 +16,7 @@ public class User {
     private Integer id;
 
     @MyConstraint(message = "这是一个测试")
+    @ApiModelProperty(value = "用户名")
     private String username;
 
     @NotBlank(message = "密码不能为空")

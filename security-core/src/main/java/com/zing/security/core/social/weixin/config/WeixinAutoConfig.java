@@ -2,7 +2,7 @@ package com.zing.security.core.social.weixin.config;
 
 import com.zing.security.core.properties.SecurityProperties;
 import com.zing.security.core.properties.WeixinProperties;
-import com.zing.security.core.social.SimpleConnectView;
+import com.zing.security.core.social.view.SimpleConnectView;
 import com.zing.security.core.social.weixin.connect.WeixinConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.web.servlet.View;
 
+/**
+ * 微信登录配置
+ */
 @Configuration
 @ConditionalOnProperty(prefix = "zing.security.social.weixin", name = "app-id")
 public class WeixinAutoConfig extends SocialAutoConfigurerAdapter {

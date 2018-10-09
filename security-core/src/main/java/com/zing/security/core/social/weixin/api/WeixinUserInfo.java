@@ -1,5 +1,8 @@
 package com.zing.security.core.social.weixin.api;
 
+/**
+ * 微信用户信息
+ */
 public class WeixinUserInfo {
 
     /**
