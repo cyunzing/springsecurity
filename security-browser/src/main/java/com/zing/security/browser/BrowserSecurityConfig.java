@@ -1,17 +1,15 @@
 package com.zing.security.browser;
 
-import com.zing.security.core.authentication.AbstractChannelSecurityConfig;
 import com.zing.security.core.authentication.FormAuthenticationConfig;
 import com.zing.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.zing.security.core.authorize.AuthorizeConfigManager;
-import com.zing.security.core.properties.SecurityConstants;
 import com.zing.security.core.properties.SecurityProperties;
 import com.zing.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -26,7 +24,7 @@ import javax.sql.DataSource;
  * 浏览器环境下安全配置主类
  */
 @Configuration
-public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SecurityProperties securityProperties;

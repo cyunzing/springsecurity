@@ -15,7 +15,7 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+//@Component
 @Transactional
 public class DemoUserDetailService implements UserDetailsService, SocialUserDetailsService {
 

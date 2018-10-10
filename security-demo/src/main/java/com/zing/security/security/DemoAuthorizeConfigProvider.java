@@ -10,8 +10,6 @@ public class DemoAuthorizeConfigProvider implements AuthorizeConfigProvider {
 
     @Override
     public boolean config(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry config) {
-
-        config.anyRequest().access("@rbacService.hasPermission(request, authentication)");
         //demo项目授权配置
         return false;
 
